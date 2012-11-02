@@ -80,7 +80,7 @@ function CalculateSunriseOrSunset(geo, date, sunrise, twilight)
 
   // Convert the longitude to hour value and calculate an approximate time.
 
-  lngHour = geo.lng / 15.0;
+  lngHour = geo.long / 15.0;
 
   if (sunrise)
       t = N + ((6.0 - lngHour) / 24.0);
@@ -161,7 +161,7 @@ function CalculateSunriseOrSunset(geo, date, sunrise, twilight)
   UT = T - lngHour;
 
   // remove me
-  UT += Math.ceil(geo.lng / 15);
+  UT += Math.ceil(geo.long / 15);
 
   while (UT >= 24) UT -= 24.0;
   while (UT <  0)  UT += 24.0;
@@ -176,13 +176,8 @@ function timeToAngle(time){
 
 }
 
-var currentDate = new Date(2011,06,20);
-var geo = { lat : 59.17, lng: 18.3 };
-
-var dawn = CalculateSunriseOrSunset(geo, currentDate, true, false);
-var dusk = CalculateSunriseOrSunset(geo, currentDate, false, false);
-
-
+var currentDate;
+var geo; // = { 'lat' : 59.17, 'long': 18.3 };
 
 var width = 400,
     height = 400,
@@ -199,26 +194,38 @@ var svg = d3.select(".display").append("svg")
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-var meter = svg.append("g")
+var graph = svg.append("g")
     .attr("class", "display");
 
-meter.append("path")
-    .attr("d", arc.endAngle(twoPi))
-    .attr("class", "background")
+function renderGraph(){
 
+  graph.append("path")
+      .attr("d", arc.endAngle(twoPi))
+      .attr("class", "background")
 
-var startAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, true, false));
-var endAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, false, false));
+  var startAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, true, false));
+  var endAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, false, false));
 
-/*
-var twilight = meter.append("path")
-    .attr("class", "twilight")
-    .attr("d", arc.startAngle(startAngle + Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, true, true))))
-    .attr("d", arc.endAngle(startAngle + Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, false, true))));
-*/
+  var sun = graph.append("path")
+      .attr("class", "foreground")
+      .attr("d", arc.startAngle(startAngle))
+      .attr("d", arc.endAngle(endAngle));
 
-var sun = meter.append("path")
-    .attr("class", "foreground")
-    .attr("d", arc.startAngle(startAngle))
-    .attr("d", arc.endAngle(endAngle));
+}
       
+$(document).ready(function(){
+  geo = com.unitedCoders.geo.ll[0];
+  $("h2").text(geo.city);
+
+  if (window.location.hash){
+    currentDate = new Date(window.location.hash);    
+  }
+  else{
+    currentDate = new Date();    
+  }
+
+  $(".date").text(currentDate.getFullYear() + '-' + (currentDate.getMonth() < 10 ? '0' : '')+ (currentDate.getMonth() + 1) + '-' + (currentDate.getDate() < 10 ? '0' : '') +  currentDate.getDate()  );
+
+  renderGraph();
+
+});
