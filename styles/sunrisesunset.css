@@ -1,0 +1,47 @@
+
+  body{
+    background-color: #EEE;
+    font-family: 'Lato', sans-serif;
+    color:#333;
+  }
+
+  h3{
+    font-size: 0.9em;
+  }
+
+  .display{
+    width: 400px;
+    margin: 0 auto;
+  }
+
+  .background {
+    fill: #333;
+  }
+
+  .twilight {
+    fill: #ccc;
+  }
+
+  .foreground {
+    fill: #FFF;
+    stroke:#FFF;
+    stroke-width: 1;
+    stop-color:rgb(255,255,0);
+    stop-opacity:1;
+  }
+
+  .graph text {
+    font-size: 18px;
+  }
+
+  #page{
+    min-width: 500px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  header{
+    min-width: 500px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+  }
