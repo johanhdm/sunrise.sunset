@@ -178,6 +178,7 @@ function timeToAngle(time){
 
 var currentDate;
 var geo; // = { 'lat' : 59.17, 'long': 18.3 };
+var sun; 
 
 var width = 400,
     height = 400,
@@ -206,13 +207,23 @@ function renderGraph(){
   var startAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, true, false));
   var endAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, currentDate, false, false));
 
-  var sun = graph.append("path")
+  sun = graph.append("path")
       .attr("class", "foreground")
       .attr("d", arc.startAngle(startAngle))
       .attr("d", arc.endAngle(endAngle));
 
 }
       
+function animater(){
+  var startAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, new Date('2012-06-20'), true, false));
+  var endAngle = Math.PI+timeToAngle(CalculateSunriseOrSunset(geo, new Date('2012-06-20'), false, false));
+
+  sun.transition()
+    .attr("d", arc.startAngle(startAngle))
+    .attr("d", arc.endAngle(endAngle));
+
+}
+
 $(document).ready(function(){
   geo = com.unitedCoders.geo.ll[0];
   $("h2").text(geo.city);
